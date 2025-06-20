@@ -25,6 +25,12 @@ app.use('/images', express.static('public/images'));
 app.use("/user", users);
 app.use("/admin", admin);
 
+app.get('/',(req,res)=>{
+  res.send({
+    activeStatus:true,
+    error:false
+  })
+})
 app.listen(process.env.PORT, () => {
   console.log("Server running on http://localhost:3000");
 });
