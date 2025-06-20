@@ -1,0 +1,58 @@
+.loginPage {
+  background: linear-gradient(rgba(11, 11, 11, 0.5), rgba(10, 10, 10, 0.5)),
+    url("../public/property_background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 120%;
+}
+
+.hero_section {
+  background: linear-gradient(rgba(11, 11, 11, 0.5), rgba(10, 10, 10, 0.5)),
+    url("..\public\Hero_Image.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 120%;
+}
+.feedback_section {
+  background: linear-gradient(rgba(0, 52, 101, 0.48)),
+    url("..\public\Feedback_Image.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 60px 20px;
+  color: white; /* Optional: ensures text is readable on dark background */
+}
+
+.testimonials {
+    .card {
+    border-radius: 12px;
+    }
+    .swiper-button-prev,
+    .swiper-button-next {
+            color: #007bff;
+    }
+
+}
+
+.loginForm {
+  background-color: rgba(1, 32, 93, 0.6);
+  color: white;
+}
+
+ul li :hover {
+  background-color: gray;
+}
+
+.employee_image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.emp_det_image {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}

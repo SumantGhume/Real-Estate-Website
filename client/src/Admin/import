@@ -1,0 +1,8 @@
+
+import { useApi } from '../context/ApiContext';
+
+
+const { BASE_URL } = useApi();
+
+
+axios.get(`${BASE_URL}/...`)
