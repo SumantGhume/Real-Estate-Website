@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 
 // ✅ Set your base URL here (local, Railway, etc.)
-const BASE_URL = "https://real-estate-website-two-pi.vercel.app/"; // Change this in one place
+const BASE_URL = "https://real-estate-website-sumantghumes-projects.vercel.app/"; // Change this in one place
 
 const ApiContext = createContext();
 
