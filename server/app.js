@@ -1,7 +1,7 @@
 // server.js
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser"; // ✅ added
+import cookieParser from "cookie-parser"; 
 import { users } from "./Routes/UserRouter.js";
 import { admin } from "./Routes/AdminRoutes.js";
 import dotenv from 'dotenv'
@@ -11,14 +11,14 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173", // frontend URL
+  origin: "http://localhost:5173", 
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true // ✅ required for cookies
+  credentials: true 
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser()); // ✅ added here
+app.use(cookieParser()); 
 
 app.use('/images', express.static('public/images'));
 
