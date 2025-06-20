@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./FilteredList.css"; // Optional custom styling
+import "./FilteredList.css";
+import { useApi } from "../context/ApiContext";
 
-import { useApi } from '../context/ApiContext';
-
-
-
-
-const Filtered_List = () => {
+const FilteredList = () => {
   const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { BASE_URL } = useApi();
-  // Get userId from localStorage
-  const userId = localStorage.getItem("userId");
 
-  // Parse search filters from query string
   const searchParams = new URLSearchParams(location.search);
   const filters = {
     property_type: searchParams.get("property_type") || "",
@@ -25,8 +21,9 @@ const Filtered_List = () => {
     price: searchParams.get("price") || "",
   };
 
-  // Fetch filtered properties whenever filters change
   useEffect(() => {
+    setLoading(true);
+    setError(null);
     axios
       .get(`${BASE_URL}/user/filtered-properties`, {
         params: filters,
@@ -40,66 +37,80 @@ const Filtered_List = () => {
       })
       .catch((err) => {
         console.error("Error fetching properties:", err);
+        setError("Failed to load properties.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [location.search]);
 
-  // Handle view details button
   const handleDetailsClick = (propertyId) => {
-    navigate(`/property_detail/${propertyId}?`);
+    navigate(`/property_detail/${propertyId}`);
   };
 
   return (
-    <div className="container mt-5">
+    <main className="container mt-5">
       <h3 className="mb-4">Filtered Properties</h3>
 
-      {properties.length === 0 ? (
+      {loading && (
+        <div className="alert alert-info text-center">Loading properties...</div>
+      )}
+
+      {error && (
+        <div className="alert alert-danger text-center">{error}</div>
+      )}
+
+      {!loading && properties.length === 0 && !error && (
         <div className="alert alert-warning text-center">
           No properties match your filters.
         </div>
-      ) : (
-        properties.map((prop) => (
-          <div className="card shadow mb-4" key={prop.id}>
-            <div className="row g-0 p-3 align-items-center">
+      )}
 
-              {/* Left: Image */}
-              <div className="col-md-3 text-center">
-                <img
-                  src={`${BASE_URL}/images/${prop.image}`}
-                  alt={prop.pro_name}
-                  onError={(e) => { e.target.src = "/default-property.jpg"; }}
-                  className="img-fluid rounded"
-                  style={{ maxHeight: "150px", objectFit: "cover" }}
-                />
-              </div>
+      {properties.map((prop) => (
+        <article className="card shadow mb-4" key={prop.id}>
+          <div className="row g-0 p-3 align-items-center">
 
-              {/* Center: Info */}
-              <div className="col-md-6">
-                <h5 className="mb-1">{prop.pro_name}</h5>
-                <p className="mb-1"><strong>Owner:</strong> {prop.owner_name}</p>
-                <p className="mb-1"><strong>City:</strong> {prop.city}</p>
-              </div>
-
-              {/* Right: Price and Details Button */}
-              <div className="col-md-3 text-end">
-                <h5 className="text-success">₹{parseFloat(prop.price).toLocaleString()}</h5>
-                <button
-                  className="btn btn-primary mt-2"
-                  onClick={() => handleDetailsClick(prop.id)}
-                >
-                  View Details
-                </button>
-              </div>
+            {/* Image */}
+            <div className="col-md-3 text-center">
+              <img
+                src={`${BASE_URL}/images/${prop.image}`}
+                alt={prop.pro_name}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/default-property.jpg";
+                }}
+                className="img-fluid rounded"
+                style={{ maxHeight: "150px", objectFit: "cover" }}
+              />
             </div>
 
-            {/* Bottom: Description */}
-            <div className="card-footer bg-light">
-              <p className="mb-0">{prop.description}</p>
+            {/* Info */}
+            <div className="col-md-6">
+              <h5 className="mb-1">{prop.pro_name}</h5>
+              <p className="mb-1"><strong>Owner:</strong> {prop.owner_name}</p>
+              <p className="mb-1"><strong>City:</strong> {prop.city}</p>
+            </div>
+
+            {/* Price and Button */}
+            <div className="col-md-3 text-end">
+              <h5 className="text-success">₹{parseFloat(prop.price).toLocaleString()}</h5>
+              <button
+                className="btn btn-primary mt-2"
+                onClick={() => handleDetailsClick(prop.id)}
+              >
+                View Details
+              </button>
             </div>
           </div>
-        ))
-      )}
-    </div>
+
+          {/* Description */}
+          <div className="card-footer bg-light">
+            <p className="mb-0">{prop.description}</p>
+          </div>
+        </article>
+      ))}
+    </main>
   );
 };
 
-export default Filtered_List;
+export default FilteredList;
